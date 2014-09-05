@@ -3,7 +3,6 @@ package com.brian.Stick.graphics;
 import java.util.Random;
 
 import com.brian.Stick.entity.projectile.Projectile;
-import com.brian.Stick.level.tile.PathTile;
 import com.brian.Stick.level.tile.Tile;
 
 public class Screen {
@@ -58,45 +57,6 @@ public class Screen {
 				int col = p.getSprite().pixels[x + y * p.getSprite().SIZE];
 				if (col != 0xffff00ff) pixels[xa + ya * width] = col;
 			}
-		}
-	}
-
-	// direction should use letters NESW
-	@SuppressWarnings("unused")
-	public void renderPath(int xp, int yp) {
-		for (int y = 0; y < Tile.grass.sprite.SIZE; y++) {//y is usually 16; sprite size
-			int ya = y + yp;
-			for (int x = 0; x < Tile.grass.sprite.SIZE; x++) {
-				int xa = x + xp;
-				if (xa < -Tile.grass.sprite.SIZE || xa >= width || ya < 0 || ya >= height) break;
-				if (xa < 0) xa = 0;
-				pixels[xa + ya * width] = Tile.grass.sprite.pixels[x + y * Tile.grass.sprite.SIZE];
-			}
-		}// renders the grass block in preparation to render path
-		if (false) switch ("/*PathTile.getDirection()*/") {
-			case "NS":
-				for (int y = 0; y < Tile.grass.sprite.SIZE; y++) {
-					int ya = y + yp;
-					for (int x = 0; x < Tile.grass.sprite.SIZE; x++) {
-						int xa = x + xp;
-						if (xa < -Tile.grass.sprite.SIZE || xa >= width || ya < 0 || ya >= height) break;
-						if (xa < 0) xa = 0;
-						pixels[xa + ya * width] = Tile.grass.sprite.pixels[x + y * Tile.grass.sprite.SIZE];
-					}
-				}
-				break;
-			case "EW":
-				break;
-			case "NE":
-				break;
-			case "NW":
-				break;
-			case "SE":
-				break;
-			case "SW":
-				break;
-			default:
-
 		}
 	}
 
