@@ -21,16 +21,18 @@ public class Level {
 	protected int tile_size;
 	public String name;
 
+	private int[] stickPath;
+
 	private List<Entity> entities = new ArrayList<Entity>();
 	public List<Projectile> projectiles = new ArrayList<Projectile>();
 	public List<PathTile> path = new ArrayList<PathTile>();
 
-	public Level(String path) {
+	public Level(String path, Screen screen) {
 		this.name = path.substring("/levels/".length(), path.length() - 4);
-		loadLevel(path);
+		loadLevel(path, screen);
 	}
 
-	protected void loadLevel(String path) {
+	protected void loadLevel(String path, Screen screen) {
 		try {
 			BufferedImage image = ImageIO.read(Level.class.getResource(path));
 			int w = width = image.getWidth();
@@ -38,20 +40,86 @@ public class Level {
 			tiles = new int[w * h];
 			image.getRGB(0, 0, w, h, tiles, 0, w);
 			getPath(tiles);
+			loadLevelPixels(screen);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("Exception! Could not load level file!");
+			System.out.println("Error! Could not load level file!");
 		}
 	}
 
 	public void getPath(int[] tiles) {
+		int pathTiles = 0;
 		for (int x = 0; x < width; x++)
 			for (int y = 0; y < height; y++)
-				if (tiles[x + y * width] == Tile.col_grass) System.out.println(tiles[x + y * width]);
+				if (tiles[x + y * width] >= Tile.col_pathNS && tiles[x + y * width] <= Tile.col_pathNW) {
+					/*
+					 * System.out.println("Detected path tile #" + pathTiles +
+					 * " at (" + x + ", " + y + "). Type: " + tiles[x + y *
+					 * width]);
+					 */
+					pathTiles++;
+				}
+		stickPath = new int[pathTiles];
 
+		try {
+			for (int y = 0; y < height; y++)
+				if (tiles[y * width] >= Tile.col_pathNS && tiles[y * width] <= Tile.col_pathNW) stickPath[0] = y * width;
+			System.out.println("Starting path at (" + stickPath[0] % height + ", " + stickPath[0] / width + ").");
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			System.out.println("Error! Could not find path start!");
+		}
+
+		try {
+			int[] surrounding = new int[3];
+			for (int i = 0; i < 3; i++)
+				surrounding[i] = stickPath[0] + width * (i - 1) + 1;
+			for (int i = 0; i < 3; i++) {
+				if (tiles[surrounding[i]] >= Tile.col_pathNS && tiles[surrounding[i]] <= Tile.col_pathNW) {
+					stickPath[1] = surrounding[i];
+					System.out.println("Continuing path to (" + stickPath[1] % width + ", " + stickPath[1] / width + ").");
+				}
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			System.out.println("Error! Could not trace path from start to finish!");
+		}
+		try {
+			for (int l = 2; l < stickPath.length - 1; l++) {
+				int[] surrounding = new int[8];
+				for (int i = 0; i < 3; i++)
+					surrounding[i] = stickPath[l - 1] - width + i - 1;
+				surrounding[3] = stickPath[l - 1] - 1;
+				surrounding[4] = stickPath[l - 1] + 1;
+				for (int i = 5; i < 8; i++)
+					surrounding[i] = stickPath[l - 1] + width + i - 6;
+				for (int i = 0; i < 8; i++) {
+					if (tiles[surrounding[i]] >= Tile.col_pathNS && tiles[surrounding[i]] <= Tile.col_pathNW
+							&& surrounding[i] != stickPath[l - 2]) {
+						stickPath[l] = surrounding[i];
+						System.out.println("Continuing path to (" + stickPath[l] % width + ", " + stickPath[l] / width
+								+ ").");
+					}
+				}
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			System.out.println("Error! Could not trace path from start to finish!");
+		}
+
+		try {
+			for (int y = 0; y < height; y++)
+				if (tiles[y * width + width - 1] >= Tile.col_pathNS && tiles[y * width + width - 1] <= Tile.col_pathNW) stickPath[0] = y
+						* width;
+			System.out.println("Starting path at (" + stickPath[stickPath.length - 1] % height + ", "
+					+ stickPath[stickPath.length - 1] / width + ").");
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+			System.out.println("Error! Could not find path start!");
+		}
 	}
 
-	public void render(Screen screen) {
+	public void loadLevelPixels(Screen screen) {
 		int x1 = (screen.width + 16) >> 4;
 		int y1 = (screen.height + 16) >> 4;
 
@@ -60,6 +128,17 @@ public class Level {
 				getTile(x, y).render(x, y, screen);
 			}
 		}
+
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).render(screen);
+		}
+		// for (int i = 0; i < projectiles.size(); i++) {
+		// projectiles.get(i).render(screen);
+		// }
+	}
+
+	public void render(Screen screen) {
+		screen.renderLevel();
 
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(screen);
@@ -85,7 +164,6 @@ public class Level {
 		if (tiles[x + y * width] == Tile.col_grass) return Tile.grass;
 		if (tiles[x + y * width] == Tile.col_flower) return Tile.flower;
 		if (tiles[x + y * width] == Tile.col_rock) return Tile.rock;
-		if (tiles[x + y * width] == Tile.col_path) return Tile.rock;
 		if (tiles[x + y * width] == Tile.col_pathNS) return Tile.pathNS;
 		if (tiles[x + y * width] == Tile.col_pathEW) return Tile.pathEW;
 		if (tiles[x + y * width] == Tile.col_pathSE) return Tile.pathSE;

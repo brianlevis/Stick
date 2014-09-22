@@ -44,7 +44,7 @@ public class Game extends Canvas implements Runnable {
 		screen = new Screen(width, height);
 		frame = new JFrame();
 		key = new Keyboard();
-		gm = new GameManager();
+		gm = new GameManager(screen);
 
 		addKeyListener(key);
 

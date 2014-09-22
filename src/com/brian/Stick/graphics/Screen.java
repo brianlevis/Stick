@@ -14,6 +14,8 @@ public class Screen {
 	// public int xOffset, yOffset;
 	public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
 	private Random random = new Random();
+	
+	public int[] currentMapPixels = new int[640 * 480];
 
 	public Screen(int width, int height) {
 		this.width = width;
@@ -33,6 +35,8 @@ public class Screen {
 		}
 	}
 
+	
+	//this method is to be called on every tile ONCE per level
 	public void renderTile(int xp, int yp, Tile tile) {
 		for (int y = 0; y < tile.sprite.SIZE; y++) {
 			int ya = y + yp;
@@ -40,9 +44,13 @@ public class Screen {
 				int xa = x + xp;
 				if (xa < -tile.sprite.SIZE || xa >= width || ya < 0 || ya >= height) break;
 				if (xa < 0) xa = 0;
-				pixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+				currentMapPixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 			}
 		}
+	}
+	
+	public void renderLevel() {
+		pixels = currentMapPixels.clone();
 	}
 
 	public void renderProjectile(int xp, int yp, Projectile p) {
