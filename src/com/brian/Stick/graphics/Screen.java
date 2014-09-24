@@ -3,6 +3,7 @@ package com.brian.Stick.graphics;
 import java.util.Random;
 
 import com.brian.Stick.entity.projectile.Projectile;
+import com.brian.Stick.level.Level;
 import com.brian.Stick.level.tile.Tile;
 
 public class Screen {
@@ -15,7 +16,7 @@ public class Screen {
 	public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
 	private Random random = new Random();
 	
-	public int[] currentMapPixels = new int[640 * 480];
+	
 
 	public Screen(int width, int height) {
 		this.width = width;
@@ -37,20 +38,20 @@ public class Screen {
 
 	
 	//this method is to be called on every tile ONCE per level
-	public void renderTile(int xp, int yp, Tile tile) {
+	public void renderTile(int xp, int yp, Tile tile, Level level) {
 		for (int y = 0; y < tile.sprite.SIZE; y++) {
 			int ya = y + yp;
 			for (int x = 0; x < tile.sprite.SIZE; x++) {
 				int xa = x + xp;
 				if (xa < -tile.sprite.SIZE || xa >= width || ya < 0 || ya >= height) break;
 				if (xa < 0) xa = 0;
-				currentMapPixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+				level.currentMapPixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
 			}
 		}
 	}
 	
-	public void renderLevel() {
-		pixels = currentMapPixels.clone();
+	public void renderLevel(Level level) {
+		pixels = level.currentMapPixels.clone();
 	}
 
 	public void renderProjectile(int xp, int yp, Projectile p) {

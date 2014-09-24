@@ -2,11 +2,13 @@ package com.brian.Stick.level.tile;
 
 import com.brian.Stick.graphics.Screen;
 import com.brian.Stick.graphics.Sprite;
+import com.brian.Stick.level.Level;
 
 public class Tile {
 	
 	public int x, y;
 	public Sprite sprite;
+	public boolean solid = false;
 	
 	public static Tile grass = new Tile(Sprite.grass);
 	public static Tile flower = new Tile(Sprite.flower);
@@ -34,12 +36,8 @@ public class Tile {
 		this.sprite = sprite;
 	}
 	
-	public void render(int x, int y, Screen screen) {
-		screen.renderTile(x << 4, y << 4, this);
-	}
-	
-	public boolean solid() {
-		return false;
+	public void render(int x, int y, Screen screen, Level level) {
+		screen.renderTile(x << 4, y << 4, this, level);
 	}
 
 }

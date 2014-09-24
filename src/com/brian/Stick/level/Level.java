@@ -26,6 +26,8 @@ public class Level {
 	private List<Entity> entities = new ArrayList<Entity>();
 	public List<Projectile> projectiles = new ArrayList<Projectile>();
 	public List<PathTile> path = new ArrayList<PathTile>();
+	
+	public int[] currentMapPixels = new int[640 * 480];
 
 	public Level(String path, Screen screen) {
 		this.name = path.substring("/levels/".length(), path.length() - 4);
@@ -34,6 +36,7 @@ public class Level {
 
 	protected void loadLevel(String path, Screen screen) {
 		try {
+			System.out.println("Loading level file at " + path + "...");
 			BufferedImage image = ImageIO.read(Level.class.getResource(path));
 			int w = width = image.getWidth();
 			int h = height = image.getHeight();
@@ -43,7 +46,7 @@ public class Level {
 			loadLevelPixels(screen);
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("Error! Could not load level file!");
+			System.out.println("Error! Could not load level file at " + path + "!");
 		}
 	}
 
@@ -125,7 +128,7 @@ public class Level {
 
 		for (int y = 0; y < y1; y++) {
 			for (int x = 0; x < x1; x++) {
-				getTile(x, y).render(x, y, screen);
+				getTile(x, y).render(x, y, screen, this);
 			}
 		}
 
@@ -138,7 +141,7 @@ public class Level {
 	}
 
 	public void render(Screen screen) {
-		screen.renderLevel();
+		screen.renderLevel(this);
 
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(screen);
