@@ -2,10 +2,13 @@ package com.brian.Stick.graphics;
 
 public class Sprite {
 
-	public final int SIZE;
+	public final int width, height;
 	private int x, y;
 	public int[] pixels;
 	private SpriteSheet sheet;
+
+	public static Sprite buttonStart = new Sprite(256, 84, 0, 2, SpriteSheet.tiles);
+	public static Sprite buttonStartDepressed = new Sprite(256, 84, 0, 7, SpriteSheet.tiles);
 
 	public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.tiles);
 	public static Sprite flower = new Sprite(16, 1, 0, SpriteSheet.tiles);
@@ -19,30 +22,40 @@ public class Sprite {
 	public static Sprite voidSprite = new Sprite(16, 0x1B87E0);
 
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
-		SIZE = size;
-		pixels = new int[SIZE * SIZE];
+		width = height = size;
+		pixels = new int[width * height];
 		this.x = x * size;
 		this.y = y * size;
 		this.sheet = sheet;
 		load();
 	}
 
+	public Sprite(int width, int height, int x, int y, SpriteSheet sheet) {
+		this.width = width;
+		this.height = height;
+		pixels = new int[width * height];
+		this.x = x * width;
+		this.y = y * height;
+		this.sheet = sheet;
+		load();
+	}
+
 	public Sprite(int size, int color) {
-		SIZE = size;
-		pixels = new int[SIZE * SIZE];
+		width = height = size;
+		pixels = new int[width * height];
 		setColour(color);
 	}
 
 	private void setColour(int colour) {
-		for (int i = 0; i < SIZE * SIZE; i++) {
+		for (int i = 0; i < height * width; i++) {
 			pixels[i] = colour;
 		}
 	}
 
 	private void load() {
-		for (int y = 0; y < SIZE; y++) {
-			for (int x = 0; x < SIZE; x++) {
-				pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				pixels[x + y * width] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
 			}
 		}
 	}

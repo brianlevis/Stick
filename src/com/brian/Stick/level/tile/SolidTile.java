@@ -1,6 +1,5 @@
 package com.brian.Stick.level.tile;
 
-import com.brian.Stick.graphics.Screen;
 import com.brian.Stick.graphics.Sprite;
 
 public class SolidTile extends Tile {

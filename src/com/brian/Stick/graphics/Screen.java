@@ -39,13 +39,13 @@ public class Screen {
 	
 	//this method is to be called on every tile ONCE per level
 	public void renderTile(int xp, int yp, Tile tile, Level level) {
-		for (int y = 0; y < tile.sprite.SIZE; y++) {
+		for (int y = 0; y < tile.sprite.height; y++) {
 			int ya = y + yp;
-			for (int x = 0; x < tile.sprite.SIZE; x++) {
+			for (int x = 0; x < tile.sprite.width; x++) {
 				int xa = x + xp;
-				if (xa < -tile.sprite.SIZE || xa >= width || ya < 0 || ya >= height) break;
+				if (xa < -tile.sprite.width || xa >= width || ya < 0 || ya >= height) break;
 				if (xa < 0) xa = 0;
-				level.currentMapPixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
+				level.currentMapPixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.width];
 			}
 		}
 	}
@@ -63,7 +63,7 @@ public class Screen {
 				int xa = x + xp;
 				if (xa < -p.getSpriteSize() || xa >= width || ya < 0 || ya >= height) break;
 				if (xa < 0) xa = 0;
-				int col = p.getSprite().pixels[x + y * p.getSprite().SIZE];
+				int col = p.getSprite().pixels[x + y * p.getSprite().height];
 				if (col != 0xffff00ff) pixels[xa + ya * width] = col;
 			}
 		}

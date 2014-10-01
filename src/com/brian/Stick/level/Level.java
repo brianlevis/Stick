@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import com.brian.Stick.entity.Entity;
 import com.brian.Stick.entity.projectile.Projectile;
 import com.brian.Stick.graphics.Screen;
+import com.brian.Stick.level.button.Button;
 import com.brian.Stick.level.tile.PathTile;
 import com.brian.Stick.level.tile.Tile;
 
@@ -23,6 +24,7 @@ public class Level {
 
 	private int[] stickPath;
 
+	private List<Button> buttons = new ArrayList<Button>();
 	private List<Entity> entities = new ArrayList<Entity>();
 	public List<Projectile> projectiles = new ArrayList<Projectile>();
 	public List<PathTile> path = new ArrayList<PathTile>();
@@ -48,6 +50,15 @@ public class Level {
 			e.printStackTrace();
 			System.out.println("Error! Could not load level file at " + path + "!");
 		}
+	}
+	
+	public void generateButton(Button button){
+		//WIP
+		//buttons
+	}
+	
+	public void destroyButton(){
+		
 	}
 
 	public void getPath(int[] tiles) {

@@ -25,7 +25,8 @@ public class Game extends Canvas implements Runnable {
 
 	private Thread thread;
 	private JFrame frame;
-	private Keyboard key;
+	private Keyboard keyboard;
+	private Mouse mouse;
 	private GameManager gm;
 	private boolean running = false;
 
@@ -43,12 +44,12 @@ public class Game extends Canvas implements Runnable {
 
 		screen = new Screen(width, height);
 		frame = new JFrame();
-		key = new Keyboard();
-		gm = new GameManager(screen);
+		keyboard = new Keyboard();
+		mouse = new Mouse();
+		gm = new GameManager(screen, keyboard, mouse);
 
-		addKeyListener(key);
+		addKeyListener(keyboard);
 
-		Mouse mouse = new Mouse();
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 	}
@@ -109,7 +110,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void update() {
-		key.update();
+		keyboard.update();
 		// player.update();
 		gm.update();
 	}
