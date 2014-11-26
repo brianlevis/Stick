@@ -36,6 +36,7 @@ public class GameManager {
 
 	public void startLevel(Level level) {
 		started = false;
+		System.out.println("Starting level");
 	}
 
 	public void update() {
@@ -44,6 +45,7 @@ public class GameManager {
 	
 	public void render() {
 		levels.get(currentLevel).render(screen);
+		//levels.get(currentLevel).rend
 	}
 
 }
