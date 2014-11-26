@@ -28,7 +28,7 @@ public class Level {
 	private List<Entity> entities = new ArrayList<Entity>();
 	public List<Projectile> projectiles = new ArrayList<Projectile>();
 	public List<PathTile> path = new ArrayList<PathTile>();
-	
+
 	public int[] currentMapPixels = new int[640 * 480];
 
 	public Level(String path, Screen screen) {
@@ -51,63 +51,42 @@ public class Level {
 			System.out.println("Error! Could not load level file at " + path + "!");
 		}
 	}
-	
-	public void generateButton(Button button){
+
+	public void generateButton(Button button) {
 		//WIP
 		//buttons
 	}
-	
-	public void destroyButton(){
-		
+
+	public void destroyButton() {
+
 	}
 
 	public void getPath(int[] tiles) {
 		int pathTiles = 0;
 		for (int x = 0; x < width; x++)
 			for (int y = 0; y < height; y++)
-				if (tiles[x + y * width] >= Tile.col_pathNS && tiles[x + y * width] <= Tile.col_pathNW) {
-					/*
-					 * System.out.println("Detected path tile #" + pathTiles +
-					 * " at (" + x + ", " + y + "). Type: " + tiles[x + y *
-					 * width]);
-					 */
-					pathTiles++;
-				}
+				if (tiles[x + y * width] >= Tile.col_pathNS && tiles[x + y * width] <= Tile.col_pathNW) pathTiles++;
+
 		stickPath = new int[pathTiles];
 
 		try {
 			for (int y = 0; y < height; y++)
-				if (tiles[y * width] >= Tile.col_pathNS && tiles[y * width] <= Tile.col_pathNW) stickPath[0] = y * width;
-			System.out.println("Starting path at (" + stickPath[0] % height + ", " + stickPath[0] / width + ").");
+				if (tiles[y * width] >= Tile.col_pathNS && tiles[y * width] <= Tile.col_pathNW) {
+					stickPath[0] = y * width;
+					System.out.println("Starting path at (" + stickPath[0] % width + ", " + stickPath[0] / width + ").");
+					stickPath[1] = y * width + 1;
+				}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 			System.out.println("Error! Could not find path start!");
 		}
 
 		try {
-			int[] surrounding = new int[3];
-			for (int i = 0; i < 3; i++)
-				surrounding[i] = stickPath[0] + width * (i - 1) + 1;
-			for (int i = 0; i < 3; i++) {
-				if (tiles[surrounding[i]] >= Tile.col_pathNS && tiles[surrounding[i]] <= Tile.col_pathNW) {
-					stickPath[1] = surrounding[i];
-					System.out.println("Continuing path to (" + stickPath[1] % width + ", " + stickPath[1] / width + ").");
-				}
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			e.printStackTrace();
-			System.out.println("Error! Could not trace path from start to finish!");
-		}
-		try {
 			for (int l = 2; l < stickPath.length - 1; l++) {
-				int[] surrounding = new int[8];
-				for (int i = 0; i < 3; i++)
-					surrounding[i] = stickPath[l - 1] - width + i - 1;
-				surrounding[3] = stickPath[l - 1] - 1;
-				surrounding[4] = stickPath[l - 1] + 1;
-				for (int i = 5; i < 8; i++)
-					surrounding[i] = stickPath[l - 1] + width + i - 6;
-				for (int i = 0; i < 8; i++) {
+				int[] surrounding = { stickPath[l - 1] - width, stickPath[l - 1] - 1, stickPath[l - 1] + 1,
+						stickPath[l - 1] + width };
+
+				for (int i = 0; i < 4; i++) {
 					if (tiles[surrounding[i]] >= Tile.col_pathNS && tiles[surrounding[i]] <= Tile.col_pathNW
 							&& surrounding[i] != stickPath[l - 2]) {
 						stickPath[l] = surrounding[i];
@@ -122,14 +101,14 @@ public class Level {
 		}
 
 		try {
-			for (int y = 0; y < height; y++)
-				if (tiles[y * width + width - 1] >= Tile.col_pathNS && tiles[y * width + width - 1] <= Tile.col_pathNW) stickPath[0] = y
-						* width;
-			System.out.println("Starting path at (" + stickPath[stickPath.length - 1] % height + ", "
+			for (int y = 1; y < height - 1; y++)
+				if (tiles[y * width - 1] >= Tile.col_pathNS && tiles[y * width - 1] <= Tile.col_pathNW) stickPath[stickPath.length - 1] = y
+						* width - 1;
+			System.out.println("Finishing path at (" + stickPath[stickPath.length - 1] % width + ", "
 					+ stickPath[stickPath.length - 1] / width + ").");
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
-			System.out.println("Error! Could not find path start!");
+			System.out.println("Error! Could not find path finish!");
 		}
 	}
 
