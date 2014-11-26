@@ -7,8 +7,8 @@ public class Sprite {
 	public int[] pixels;
 	private SpriteSheet sheet;
 
-	public static Sprite buttonStart = new Sprite(256, 84, 0, 2, SpriteSheet.tiles);
-	public static Sprite buttonStartDepressed = new Sprite(256, 84, 0, 7, SpriteSheet.tiles);
+	public static Sprite buttonStart = new Sprite(256, 84, 0, 2, SpriteSheet.buttons);
+	public static Sprite buttonStartDepressed = new Sprite(256, 84, 0, 7, SpriteSheet.buttons);
 
 	public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.tiles);
 	public static Sprite flower = new Sprite(16, 1, 0, SpriteSheet.tiles);
