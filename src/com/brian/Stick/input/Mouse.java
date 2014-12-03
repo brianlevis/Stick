@@ -4,6 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import com.brian.Stick.Game;
+
 public class Mouse implements MouseListener, MouseMotionListener {
 
 	private static int mouseX = -1;
@@ -11,11 +13,11 @@ public class Mouse implements MouseListener, MouseMotionListener {
 	private static int mouseB = -1;
 
 	public static int getX() {
-		return mouseX;
+		return (int) ((double) mouseX / Game.scale);
 	}
 
 	public static int getY() {
-		return mouseY;
+		return (int) ((double) mouseY / Game.scale);
 	}
 
 	public static int getButton() {

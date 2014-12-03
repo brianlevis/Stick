@@ -18,9 +18,9 @@ import com.brian.Stick.input.Mouse;
 public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	private static int width = 640;// 40 * 16
-	private static int height = 480;// 30 * 16
-	private static double scale = 1.25;
+	public static int width = 640;// 40 * 16
+	public static int height = 480;// 30 * 16
+	public static double scale = 1.25;
 	public static String title = "Stick";
 
 	private Thread thread;
@@ -135,13 +135,14 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Verdana", 0, 50));
+		//g.setColor(Color.WHITE);
+		//g.setFont(new Font("Verdana", 0, 50));
 		// g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
 		// if (Mouse.getButton() != -1) g.drawString("Button: " +
 		// Mouse.getButton(), 80, 80);
 		g.dispose();
 		bs.show();
+		
 	}
 
 	public static void main(String[] args) {

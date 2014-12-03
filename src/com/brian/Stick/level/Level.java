@@ -32,7 +32,7 @@ public class Level {
 	public int[] currentMapPixels = new int[640 * 480];
 
 	public Level(String path, Screen screen) {
-		this.name = path.substring("/levels/".length(), path.length() - 4);
+		this.name = path.substring(10, path.length() - 4);
 		loadLevel(path, screen);
 	}
 
@@ -136,6 +136,8 @@ public class Level {
 		for (int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(screen);
 		}
+		
+		
 		// for (int i = 0; i < projectiles.size(); i++) {
 		// projectiles.get(i).render(screen);
 		// }

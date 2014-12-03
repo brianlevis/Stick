@@ -7,8 +7,8 @@ public class Sprite {
 	public int[] pixels;
 	private SpriteSheet sheet;
 
-	public static Sprite buttonStart = new Sprite(256, 84, 0, 2, SpriteSheet.buttons);
-	public static Sprite buttonStartDepressed = new Sprite(256, 84, 0, 7, SpriteSheet.buttons);
+	public static Sprite buttonStart = new Sprite(256, 80, 0, 0, SpriteSheet.buttons);
+	public static Sprite buttonStartDepressed = new Sprite(256, 80, 0, 5, SpriteSheet.buttons);
 
 	public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.tiles);
 	public static Sprite flower = new Sprite(16, 1, 0, SpriteSheet.tiles);
@@ -24,8 +24,8 @@ public class Sprite {
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
 		width = height = size;
 		pixels = new int[width * height];
-		this.x = x * size;
-		this.y = y * size;
+		this.x = x << 4;
+		this.y = y << 4;
 		this.sheet = sheet;
 		load();
 	}
@@ -34,8 +34,8 @@ public class Sprite {
 		this.width = width;
 		this.height = height;
 		pixels = new int[width * height];
-		this.x = x * width;
-		this.y = y * height;
+		this.x = x << 4;
+		this.y = y << 4;
 		this.sheet = sheet;
 		load();
 	}
@@ -53,10 +53,9 @@ public class Sprite {
 	}
 
 	private void load() {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++)
 				pixels[x + y * width] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
-			}
-		}
+
 	}
 }

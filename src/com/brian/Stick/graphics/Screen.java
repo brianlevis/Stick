@@ -69,15 +69,16 @@ public class Screen {
 		}
 	}
 
-	public void renderButton(int xp, int yp, Sprite sprite) {
-		for (int y = 0; y < 32; y++) {
+	public void renderButton(int xp, int yp, Sprite button) {
+		for (int y = 0; y < button.height; y++) {
 			int ya = y + yp;
-			for (int x = 0; x < 32; x++) {
+			for (int x = 0; x < button.width; x++) {
 				int xa = x + xp;
-				if (xa < -32 || xa >= width || ya < 0 || ya >= height) break;
-				if (xa < 0) xa = 0;
-				int col = sprite.pixels[x + y * 32];
-				if (col != 0xffff00ff) pixels[xa + ya * width] = col;
+				//if (xa < -button.width || xa >= width || ya < 0 || ya >= height) break;
+				//if (xa < 0) xa = 0;
+				int col = button.pixels[x + y * button.width];
+				if (col != 0xffff00ff) 
+					pixels[xa + ya * width] = col;
 			}
 		}
 	}
