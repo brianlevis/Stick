@@ -1,6 +1,5 @@
 package com.brian.Stick.level.button;
 
-import com.brian.Stick.Game;
 import com.brian.Stick.graphics.Screen;
 import com.brian.Stick.graphics.Sprite;
 import com.brian.Stick.input.Mouse;
